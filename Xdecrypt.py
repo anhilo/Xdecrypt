@@ -3,8 +3,6 @@ import argparse
 import base64
 import configparser
 
-from win32api import GetComputerName, GetUserName
-from win32security import LookupAccountName, ConvertSidToStringSid
 from Crypto.Hash import SHA256
 from Crypto.Cipher import ARC4
 
@@ -23,6 +21,7 @@ parser.add_argument("-s", "--sid", default="", type=str, help="`username`+`sid`,
 parser.add_argument("-p", "--password", default="", type=str, help="the password in sessions or path of sessions")
 args = parser.parse_args()
 if not args.sid:
+    from win32api import GetComputerName, GetUserName
     args.sid = GetUserName() + ConvertSidToStringSid(LookupAccountName(GetComputerName(), GetUserName())[0])
 if not args.password:
     args.password = os.path.join(os.environ["USERPROFILE"], r"Documents\NetSarang Computer\6")
